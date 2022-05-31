@@ -1,6 +1,5 @@
 package com.fiber.todocalendar;
 
-import com.fiber.todocalendar.model.HabitTrackers;
 import com.fiber.todocalendar.model.Habits;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

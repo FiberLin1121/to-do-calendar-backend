@@ -15,14 +15,15 @@ public class HabitsDaoimpl implements HabitsDao {
     private MongoTemplate mongoTemplate;
 
     /**
-     * 根据使用者id查询原子習慣列表
+     * 根據 userId 查询原子習慣列表
+     *
      * @param userId
      * @return
      */
     @Override
     public Habits getHabitsByUserId(String userId) {
-        Query query=new Query(Criteria.where("userId").is(userId));
-        Habits habits =  mongoTemplate.findOne(query , Habits.class);
+        Query query = new Query(Criteria.where("userId").is(userId));
+        Habits habits = mongoTemplate.findOne(query, Habits.class);
         System.out.println("habits = " + habits);
         return habits;
     }

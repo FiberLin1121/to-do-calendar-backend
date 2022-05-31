@@ -1,6 +1,5 @@
 package com.fiber.todocalendar.controller;
 
-import com.fiber.todocalendar.model.HabitTrackers;
 import com.fiber.todocalendar.model.Habits;
 import com.fiber.todocalendar.service.HabitsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ public class HabitsController {
     private HabitsService habitsService;
 
     @GetMapping("/users/{userId}/habits")
-    public ResponseEntity<Habits> getHabitTrackers(@PathVariable String userId) {
+    public ResponseEntity<Habits> getHabits(@PathVariable String userId) {
         Habits habits = habitsService.getHabitsByUserId(userId);
         if (habits != null) {
             return ResponseEntity.status(HttpStatus.OK).body(habits);

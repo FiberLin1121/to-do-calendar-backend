@@ -1,6 +1,5 @@
 package com.fiber.todocalendar.dao;
 
-import com.fiber.todocalendar.model.HabitTrackers;
 import com.fiber.todocalendar.model.Habits;
 
 public interface HabitsDao {
