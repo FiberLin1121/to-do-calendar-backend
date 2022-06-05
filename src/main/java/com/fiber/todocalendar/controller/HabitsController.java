@@ -1,13 +1,14 @@
 package com.fiber.todocalendar.controller;
 
+import com.fiber.todocalendar.dto.PatchRequest;
 import com.fiber.todocalendar.model.Habits;
 import com.fiber.todocalendar.service.HabitsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 public class HabitsController {
@@ -23,4 +24,14 @@ public class HabitsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @PatchMapping("/users/{userId}/habits")
+    public ResponseEntity<Habits> patchHabit(@PathVariable String userId,
+                                                                    @RequestBody @Valid PatchRequest patchRequest) {
+        habitsService.patchHabit(userId, patchRequest);
+        Habits habits = habitsService.getHabitsByUserId(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(habits);
+    }
+
+
 }

@@ -14,4 +14,11 @@ public class Habits {
     private List<Habit> habitList = new ArrayList<>();
     private long createdTime;
     private long lastModifiedTime;
+
+    public Habits(String userId) {
+        long now = System.currentTimeMillis();
+        this.userId = userId;
+        this.createdTime = now;
+        this.lastModifiedTime = now;
+    }
 }
