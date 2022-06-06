@@ -8,5 +8,7 @@ public interface HabitsDao {
 
     void addHabit(String userId, PatchRequest patchRequest);
 
+    void replaceHabit(String userId, PatchRequest patchRequest);
+
     void removeHabit(String userId, PatchRequest patchRequest);
 }

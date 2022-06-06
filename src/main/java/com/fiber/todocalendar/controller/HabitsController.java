@@ -32,6 +32,4 @@ public class HabitsController {
         Habits habits = habitsService.getHabitsByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(habits);
     }
-
-
 }

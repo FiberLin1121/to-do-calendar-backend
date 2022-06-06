@@ -4,14 +4,13 @@ import com.fiber.todocalendar.dao.HabitsDao;
 import com.fiber.todocalendar.dto.PatchRequest;
 import com.fiber.todocalendar.model.Habit;
 import com.fiber.todocalendar.model.Habits;
+import com.mongodb.BasicDBObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 public class HabitsDaoimpl implements HabitsDao {
@@ -33,6 +32,16 @@ public class HabitsDaoimpl implements HabitsDao {
     }
 
     /**
+     * 查詢原子習慣列表是否存在
+     *
+     * @param userId
+     */
+    private boolean isHabitsExists(String userId) {
+        Query query = Query.query(Criteria.where("userId").is(userId));
+        return mongoTemplate.exists(query, "habits");
+    }
+
+    /**
      * 增加原子習慣
      *
      * @param userId
@@ -44,11 +53,40 @@ public class HabitsDaoimpl implements HabitsDao {
         String checkColor = patchRequest.getValue().get("checkColor").toString();
         Habit habit = new Habit(name, checkColor);
         Query query = new Query(Criteria.where("userId").is(userId));
-        boolean isHabitsExists = mongoTemplate.exists(query, "habitTrackers");
-        if (!isHabitsExists) {
+
+        if (!isHabitsExists(userId)) {
             createHabits(userId);
         }
-        Update update = new Update().push( "habitList" , habit).set("lastModifiedTime", System.currentTimeMillis());
+
+        Update update = new Update()
+                .push("habitList", habit).set("lastModifiedTime", System.currentTimeMillis());
+
+        mongoTemplate.updateFirst(query, update, "habits");
+    }
+
+    /**
+     * 修改原子習慣
+     *
+     * @param userId
+     * @param patchRequest
+     */
+    @Override
+    public void replaceHabit(String userId, PatchRequest patchRequest) {
+        String habitId = patchRequest.getValue().get("habitId").toString();
+        String name = patchRequest.getValue().get("name").toString();
+        String checkColor = patchRequest.getValue().get("checkColor").toString();
+        long now = System.currentTimeMillis();
+
+        Update update = new Update()
+                .set("habitList.$.name", name)
+                .set("habitList.$.checkColor", checkColor)
+                .set("habitList.$.lastModifiedTime", now)
+                .set("lastModifiedTime", now);
+
+        Query query = Query.query(new Criteria().andOperator(
+                Criteria.where("userId").is(userId),
+                Criteria.where("habitList").elemMatch(Criteria.where("habitId").is(habitId))));
+
         mongoTemplate.updateFirst(query, update, "habits");
     }
 
@@ -60,12 +98,15 @@ public class HabitsDaoimpl implements HabitsDao {
      */
     @Override
     public void removeHabit(String userId, PatchRequest patchRequest) {
-        Query query = new Query(Criteria.where("userId").is(userId));
-        boolean isHabitsExists = mongoTemplate.exists(query, "habitTrackers");
-        if (isHabitsExists) {
-            Update update = new Update().push( "habitList" , patchRequest.getValue()).set("lastModifiedTime", System.currentTimeMillis());
-            mongoTemplate.updateFirst(query, update, "habits");
-        }
+        String habitId = patchRequest.getValue().get("habitId").toString();
+        Query query = Query.query(Criteria.where("userId").is(userId));
+
+        Update update = new Update()
+                .pull("habitList", new BasicDBObject("habitId", habitId))
+                .set("lastModifiedTime", System.currentTimeMillis());
+
+        mongoTemplate.updateFirst(query, update, "habits");
+
     }
 
     /**
@@ -73,8 +114,8 @@ public class HabitsDaoimpl implements HabitsDao {
      *
      * @param userId
      */
-    private void createHabits(String userId){
+    private void createHabits(String userId) {
         Habits habits = new Habits(userId);
-        mongoTemplate.insert(habits,"habits");
+        mongoTemplate.insert(habits, "habits");
     }
 }

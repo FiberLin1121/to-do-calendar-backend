@@ -23,6 +23,9 @@ public class HabitsServiceImpl implements HabitsService {
             case "add":
                 habitsDao.addHabit(userId, patchRequest);
                 break;
+            case "replace":
+                habitsDao.replaceHabit(userId, patchRequest);
+                break;
             case "remove":
                 habitsDao.removeHabit(userId, patchRequest);
                 break;
