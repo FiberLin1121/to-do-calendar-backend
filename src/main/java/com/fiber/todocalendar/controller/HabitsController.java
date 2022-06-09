@@ -1,5 +1,6 @@
 package com.fiber.todocalendar.controller;
 
+import com.fiber.todocalendar.dto.HabitsRequest;
 import com.fiber.todocalendar.dto.PatchRequest;
 import com.fiber.todocalendar.model.Habits;
 import com.fiber.todocalendar.service.HabitsService;
@@ -27,8 +28,16 @@ public class HabitsController {
 
     @PatchMapping("/users/{userId}/habits")
     public ResponseEntity<Habits> patchHabit(@PathVariable String userId,
-                                                                    @RequestBody @Valid PatchRequest patchRequest) {
+                                             @RequestBody @Valid PatchRequest patchRequest) {
         habitsService.patchHabit(userId, patchRequest);
+        Habits habits = habitsService.getHabitsByUserId(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(habits);
+    }
+
+    @PutMapping("/users/{userId}/habits")
+    public ResponseEntity<Habits> putHabitsOrder(@PathVariable String userId,
+                                                 @RequestBody @Valid HabitsRequest habitRequest) {
+        habitsService.putHabitsOrder(userId, habitRequest);
         Habits habits = habitsService.getHabitsByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(habits);
     }

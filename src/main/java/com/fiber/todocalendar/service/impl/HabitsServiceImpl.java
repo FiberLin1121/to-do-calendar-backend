@@ -1,6 +1,7 @@
 package com.fiber.todocalendar.service.impl;
 
 import com.fiber.todocalendar.dao.HabitsDao;
+import com.fiber.todocalendar.dto.HabitsRequest;
 import com.fiber.todocalendar.dto.PatchRequest;
 import com.fiber.todocalendar.model.Habits;
 import com.fiber.todocalendar.service.HabitsService;
@@ -30,5 +31,10 @@ public class HabitsServiceImpl implements HabitsService {
                 habitsDao.removeHabit(userId, patchRequest);
                 break;
         }
+    }
+
+    @Override
+    public void putHabitsOrder(String userId, HabitsRequest habitRequest) {
+        habitsDao.replaceHabits(userId, habitRequest);
     }
 }

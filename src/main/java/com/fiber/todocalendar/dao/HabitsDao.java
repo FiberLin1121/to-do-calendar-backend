@@ -1,5 +1,6 @@
 package com.fiber.todocalendar.dao;
 
+import com.fiber.todocalendar.dto.HabitsRequest;
 import com.fiber.todocalendar.dto.PatchRequest;
 import com.fiber.todocalendar.model.Habits;
 
@@ -11,4 +12,6 @@ public interface HabitsDao {
     void replaceHabit(String userId, PatchRequest patchRequest);
 
     void removeHabit(String userId, PatchRequest patchRequest);
+
+    void replaceHabits(String userId, HabitsRequest habitRequest);
 }

@@ -1,6 +1,7 @@
 package com.fiber.todocalendar.dao.impl;
 
 import com.fiber.todocalendar.dao.HabitsDao;
+import com.fiber.todocalendar.dto.HabitsRequest;
 import com.fiber.todocalendar.dto.PatchRequest;
 import com.fiber.todocalendar.model.Habit;
 import com.fiber.todocalendar.model.Habits;
@@ -107,6 +108,18 @@ public class HabitsDaoimpl implements HabitsDao {
 
         mongoTemplate.updateFirst(query, update, "habits");
 
+    }
+
+    /**
+     * 修改原子習慣列表排序
+     *
+     * @param userId
+     */
+    @Override
+    public void replaceHabits(String userId, HabitsRequest habitRequest) {
+        Query query = Query.query(Criteria.where("userId").is(userId));
+        Update update = new Update().set("habitList", habitRequest.getHabitList());
+        mongoTemplate.updateFirst(query, update, "habits");
     }
 
     /**
