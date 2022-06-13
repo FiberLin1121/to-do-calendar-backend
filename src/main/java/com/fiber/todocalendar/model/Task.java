@@ -6,18 +6,18 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
-public class Habit {
-    private String habitId;
+public class Task {
+    private String taskId;
     private String name;
-    private String checkColor;
+    private String labelType;
     private Date createdTime;
     private Date lastModifiedTime;
 
-    public Habit(String name, String checkColor) {
+    public Task(String name, String labelType) {
         Date now = new Date();
-        this.habitId = UUID.randomUUID().toString().toLowerCase().replace("-", "");
+        this.taskId = UUID.randomUUID().toString().toLowerCase().replace("-", "");
         this.name = name;
-        this.checkColor = checkColor;
+        this.labelType = labelType;
         this.createdTime = now;
         this.lastModifiedTime = now;
     }

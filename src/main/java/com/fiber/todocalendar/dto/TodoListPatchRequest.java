@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.Map;
 
 @Data
-public class PatchRequest {
+public class TodoListPatchRequest {
     @NotBlank
     private String op;
     @NotBlank

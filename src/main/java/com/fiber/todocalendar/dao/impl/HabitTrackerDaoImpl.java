@@ -2,7 +2,7 @@ package com.fiber.todocalendar.dao.impl;
 
 import com.fiber.todocalendar.dao.HabitTrackerDao;
 import com.fiber.todocalendar.dto.HabitTrackerQueryParams;
-import com.fiber.todocalendar.dto.PatchRequest;
+import com.fiber.todocalendar.dto.HabitTrackerPatchRequest;
 import com.fiber.todocalendar.model.HabitTracker;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 
 @Component
 public class HabitTrackerDaoImpl implements HabitTrackerDao {
@@ -20,7 +22,7 @@ public class HabitTrackerDaoImpl implements HabitTrackerDao {
     private MongoTemplate mongoTemplate;
 
     /**
-     * 條件查询原子習慣追蹤
+     * 條件查询原子習慣紀錄
      *
      * @param habitTrackerQueryParams
      * @return
@@ -34,39 +36,39 @@ public class HabitTrackerDaoImpl implements HabitTrackerDao {
     }
 
     /**
-     * 增加原子習慣追蹤的圈選日期
+     * 增加原子習慣紀錄的圈選日期
      *
-     * @param patchRequest
+     * @param habitTrackerPatchRequest
      * @return
      */
     @Override
-    public void addPickedDay(HabitTrackerQueryParams habitTrackerQueryParams, PatchRequest patchRequest) {
+    public void addPickedDay(HabitTrackerQueryParams habitTrackerQueryParams, HabitTrackerPatchRequest habitTrackerPatchRequest) {
         Query query = new Query(Criteria.where("habitId").is(habitTrackerQueryParams.getHabitId())
                 .and("year").is(habitTrackerQueryParams.getYear()));
         boolean isHabitTrackerExists = mongoTemplate.exists(query, "habitTrackers");
         if (!isHabitTrackerExists) {
             createHabitTracker(habitTrackerQueryParams);
         }
-        Update update = new Update().push("pickedDays", patchRequest.getValue()).set("lastModifiedTime", System.currentTimeMillis());
+        Update update = new Update().push("pickedDays", habitTrackerPatchRequest.getValue()).set("lastModifiedTime", new Date());
         mongoTemplate.updateFirst(query, update, "habitTrackers");
     }
 
     /**
-     * 移除原子習慣追蹤的圈選日期
+     * 移除原子習慣紀錄的圈選日期
      *
-     * @param patchRequest
+     * @param habitTrackerPatchRequest
      * @return
      */
     @Override
-    public void removePickedDay(HabitTrackerQueryParams habitTrackerQueryParams, PatchRequest patchRequest) {
+    public void removePickedDay(HabitTrackerQueryParams habitTrackerQueryParams, HabitTrackerPatchRequest habitTrackerPatchRequest) {
         Query query = new Query(Criteria.where("habitId").is(habitTrackerQueryParams.getHabitId())
                 .and("year").is(habitTrackerQueryParams.getYear()));
-        Update update = new Update().pull("pickedDays", patchRequest.getValue()).set("lastModifiedTime", System.currentTimeMillis());
+        Update update = new Update().pull("pickedDays", habitTrackerPatchRequest.getValue()).set("lastModifiedTime", new Date());
         mongoTemplate.updateFirst(query, update, "habitTrackers");
     }
 
     /**
-     * 建立原子習慣追蹤
+     * 建立原子習慣紀錄
      *
      * @param habitTrackerQueryParams
      * @return

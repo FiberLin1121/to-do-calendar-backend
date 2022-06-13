@@ -9,18 +9,21 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@Document(collection = "habits")
-public class Habits {
+@Document(collection = "todoLists")
+public class TodoList {
     @Id
     private String id;
     private String userId;
-    private List<Habit> habitList = new ArrayList<>();
+    private String date;
+    private List<Task> todoList = new ArrayList<>();
+    private List<Task> doneList = new ArrayList<>();
     private Date createdTime;
     private Date lastModifiedTime;
 
-    public Habits(String userId) {
+    public TodoList(String userId, String date) {
         Date now = new Date();
         this.userId = userId;
+        this.date = date;
         this.createdTime = now;
         this.lastModifiedTime = now;
     }
