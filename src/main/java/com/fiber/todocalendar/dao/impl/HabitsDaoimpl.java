@@ -31,8 +31,7 @@ public class HabitsDaoimpl implements HabitsDao {
     @Override
     public Habits getHabitsByUserId(String userId) {
         Query query = new Query(Criteria.where("userId").is(userId));
-        Habits habits = mongoTemplate.findOne(query, Habits.class);
-        return habits;
+        return mongoTemplate.findOne(query, Habits.class);
     }
 
     /**

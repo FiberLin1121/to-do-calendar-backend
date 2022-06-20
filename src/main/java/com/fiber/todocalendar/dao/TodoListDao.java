@@ -7,10 +7,13 @@ import com.fiber.todocalendar.model.TodoList;
 
 public interface TodoListDao {
     TodoList getTodoList(TodoListQueryParams todoListQueryParams);
+
     TodoList replaceTodoList(TodoListQueryParams todoListQueryParams, TodoListRequest todoListRequest);
 
     TodoList addTask(TodoListQueryParams todoListQueryParams, TodoListPatchRequest todoListPatchRequest);
+
     TodoList replaceTask(TodoListQueryParams todoListQueryParams, TodoListPatchRequest todoListPatchRequest);
+
     TodoList removeTask(TodoListQueryParams todoListQueryParams, TodoListPatchRequest todoListPatchRequest);
 
 }

@@ -99,13 +99,14 @@ public class TodoListDaoImpl implements TodoListDao {
      */
     @Override
     public TodoList removeTask(TodoListQueryParams todoListQueryParams, TodoListPatchRequest todoListPatchRequest) {
-        String taskId = todoListPatchRequest.getValue().get("taskId").toString();
-        Query query = new Query(Criteria.where("userId").is(todoListQueryParams.getUserId()).and("date").is(todoListQueryParams.getDate()));
+        Query query = Query.query(new Criteria().andOperator(
+                Criteria.where("userId").is(todoListQueryParams.getUserId()),
+                Criteria.where("date").is(todoListQueryParams.getDate())));
 
         String targetColumn = identfyPath(todoListPatchRequest.getPath());
 
         Update update = new Update()
-                .pull(targetColumn, new BasicDBObject("taskId", taskId))
+                .pull(targetColumn, new BasicDBObject("taskId", todoListPatchRequest.getValue().get("taskId").toString()))
                 .set("lastModifiedTime", new Date());
 
         FindAndModifyOptions options = new FindAndModifyOptions();
@@ -122,11 +123,13 @@ public class TodoListDaoImpl implements TodoListDao {
      */
     @Override
     public TodoList replaceTodoList(TodoListQueryParams todoListQueryParams, TodoListRequest todoListRequest) {
-        Query query = new Query(Criteria.where("userId").is(todoListQueryParams.getUserId()).and("date").is(todoListQueryParams.getDate()));
+        Query query = Query.query(new Criteria().andOperator(
+                Criteria.where("userId").is(todoListQueryParams.getUserId()),
+                Criteria.where("date").is(todoListQueryParams.getDate())));
 
         Update update = new Update()
                 .set("todoList", todoListRequest.getTodoList())
-                .set("doneList",todoListRequest.getDoneList())
+                .set("doneList", todoListRequest.getDoneList())
                 .set("lastModifiedTime", new Date());
 
         FindAndModifyOptions options = new FindAndModifyOptions();

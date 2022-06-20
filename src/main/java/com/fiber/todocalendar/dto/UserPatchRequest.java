@@ -7,14 +7,14 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import java.util.Map;
 
-@ApiModel(description = "原子習慣列表的 JSON Patch")
+@ApiModel(description = "")
 @Data
-public class HabitsPatchRequest {
-    @ApiModelProperty(value = "操作方式", required = true, example = "add")
+public class UserPatchRequest {
+    @ApiModelProperty(value = "操作方式", required = true, example = "replace")
     @NotBlank
     private String op;
 
-    @ApiModelProperty(value = "目標欄位", required = true, example = "/habitList")
+    @ApiModelProperty(value = "目標欄位", required = true, example = "/labelSetting")
     @NotBlank
     private String path;
 
