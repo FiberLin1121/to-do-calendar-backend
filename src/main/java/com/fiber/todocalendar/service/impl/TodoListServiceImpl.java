@@ -42,7 +42,6 @@ public class TodoListServiceImpl implements TodoListService {
             default:
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-
         return todoList;
     }
 

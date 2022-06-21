@@ -13,7 +13,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 
@@ -158,6 +160,8 @@ public class TodoListDaoImpl implements TodoListDao {
             case "/doneList":
                 targetColumn = "doneList";
                 break;
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         return targetColumn;
     }
