@@ -1,8 +1,10 @@
 package com.fiber.todocalendar.dao.impl;
 
+import com.fiber.todocalendar.config.DefaultValueProperties;
 import com.fiber.todocalendar.dao.UserDao;
 import com.fiber.todocalendar.dto.UserPatchRequest;
 import com.fiber.todocalendar.dto.UserRegisterRequest;
+import com.fiber.todocalendar.model.LabelSetting;
 import com.fiber.todocalendar.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -16,8 +18,12 @@ import java.util.Date;
 
 @Component
 public class UserDaoImpl implements UserDao {
+
     @Autowired
     private MongoTemplate mongoTemplate;
+
+    @Autowired
+    DefaultValueProperties defaultValueProperties;
 
     @Override
     public User getUserById(String userId) {
@@ -34,6 +40,12 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User createUser(UserRegisterRequest userRegisterRequest) {
         User user = new User(userRegisterRequest.getName(), userRegisterRequest.getEmail(), userRegisterRequest.getPassword());
+        LabelSetting labelSetting = new LabelSetting();
+        labelSetting.setFirstColor(defaultValueProperties.getFirstColor());
+        labelSetting.setSecondColor(defaultValueProperties.getSecondColor());
+        labelSetting.setThirdColor(defaultValueProperties.getThirdColor());
+        labelSetting.setFourthColor(defaultValueProperties.getFourthColor());
+        user.setLabelSetting(labelSetting);
         return mongoTemplate.insert(user, "users");
     }
 
@@ -56,7 +68,7 @@ public class UserDaoImpl implements UserDao {
         Query query = new Query(Criteria.where("id").is(userId));
 
         Update update = new Update()
-                .set("password", userPatchRequest.getValue().get("password").toString())
+                .set("password", userPatchRequest.getValue().get("newPassword").toString())
                 .set("lastModifiedTime", new Date());
 
         FindAndModifyOptions options = new FindAndModifyOptions();
@@ -69,8 +81,6 @@ public class UserDaoImpl implements UserDao {
     public User replaceLabelSetting(String userId, UserPatchRequest userPatchRequest) {
         Query query = new Query(Criteria.where("id").is(userId));
 
-        System.out.println("firstColor = " + userPatchRequest.getValue().get("firstColor").toString());
-
         Update update = new Update()
                 .set("labelSetting.firstColor", userPatchRequest.getValue().get("firstColor").toString())
                 .set("labelSetting.secondColor", userPatchRequest.getValue().get("secondColor").toString())
@@ -81,8 +91,6 @@ public class UserDaoImpl implements UserDao {
         FindAndModifyOptions options = new FindAndModifyOptions();
         options.returnNew(true);
 
-        User user = mongoTemplate.findAndModify(query, update, options, User.class);
-        return user;
-//        return mongoTemplate.findAndModify(query, update, options, User.class);
+        return mongoTemplate.findAndModify(query, update, options, User.class);
     }
 }

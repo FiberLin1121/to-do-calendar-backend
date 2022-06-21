@@ -18,22 +18,22 @@
         </encoder>
     </appender>
     <!--输出到文件-->
-    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 輸出文件的位置，以每一天做切割-->
-            <fileNamePattern>${LOG_PATH}/logback.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <!--保留30天的歷史紀錄 -->
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-        <!--設定WARN以上級別才需要輸出至檔案-->
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>WARN</level>
-        </filter>
-        <encoder>
-            <!--Log的格式-->
-            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
+<!--    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+<!--            &lt;!&ndash; 輸出文件的位置，以每一天做切割&ndash;&gt;-->
+<!--            <fileNamePattern>${LOG_PATH}/logback.%d{yyyy-MM-dd}.log</fileNamePattern>-->
+<!--            &lt;!&ndash;保留30天的歷史紀錄 &ndash;&gt;-->
+<!--            <maxHistory>30</maxHistory>-->
+<!--        </rollingPolicy>-->
+<!--        &lt;!&ndash;設定WARN以上級別才需要輸出至檔案&ndash;&gt;-->
+<!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+<!--            <level>WARN</level>-->
+<!--        </filter>-->
+<!--        <encoder>-->
+<!--            &lt;!&ndash;Log的格式&ndash;&gt;-->
+<!--            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
 
     <root level="DEBUG">
         <!--把appender加上去-->

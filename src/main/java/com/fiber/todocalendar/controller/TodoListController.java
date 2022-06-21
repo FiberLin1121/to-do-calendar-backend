@@ -4,7 +4,7 @@ import com.fiber.todocalendar.config.DefaultValueProperties;
 import com.fiber.todocalendar.dto.TodoListQueryParams;
 import com.fiber.todocalendar.dto.TodoListPatchRequest;
 import com.fiber.todocalendar.dto.TodoListRequest;
-import com.fiber.todocalendar.model.Label;
+import com.fiber.todocalendar.model.LabelSetting;
 import com.fiber.todocalendar.model.TodoList;
 import com.fiber.todocalendar.service.TodoListService;
 import io.swagger.annotations.Api;
@@ -33,13 +33,13 @@ public class TodoListController {
     DefaultValueProperties defaultValueProperties;
 
     @GetMapping("/labels")
-    public ResponseEntity<Label> getLabelDefaultValue() {
-        Label label = new Label();
-        label.setFirstColor(defaultValueProperties.getFirstColor());
-        label.setSecondColor(defaultValueProperties.getSecondColor());
-        label.setThirdColor(defaultValueProperties.getThirdColor());
-        label.setFourthColor(defaultValueProperties.getFourthColor());
-        return ResponseEntity.status(HttpStatus.OK).body(label);
+    public ResponseEntity<LabelSetting> getLabelDefaultValue() {
+        LabelSetting labelSetting = new LabelSetting();
+        labelSetting.setFirstColor(defaultValueProperties.getFirstColor());
+        labelSetting.setSecondColor(defaultValueProperties.getSecondColor());
+        labelSetting.setThirdColor(defaultValueProperties.getThirdColor());
+        labelSetting.setFourthColor(defaultValueProperties.getFourthColor());
+        return ResponseEntity.status(HttpStatus.OK).body(labelSetting);
     }
 
     @ApiOperation(value = "取得使用者的指定日期的代辦事項")

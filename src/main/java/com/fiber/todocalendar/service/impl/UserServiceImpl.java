@@ -40,8 +40,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(UserLoginRequest userLoginRequest) {
-        System.out.println("userLoginRequest.getEmail() = " + userLoginRequest.getEmail());
-        System.out.println("userLoginRequest.getEmail() = " + userLoginRequest.getPassword());
 
         // 檢查帳號是否存在
         User user = userDao.getUserByEmail(userLoginRequest.getEmail());
@@ -72,7 +70,6 @@ public class UserServiceImpl implements UserService {
                 }
                 break;
             case "/labelSetting":
-                System.out.println("enter case labelSetting");
                 user = userDao.replaceLabelSetting(userId, userPatchRequest);
                 break;
             default:
