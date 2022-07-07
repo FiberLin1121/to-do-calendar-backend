@@ -3,21 +3,18 @@ package com.fiber.todocalendar.controller;
 import com.fiber.todocalendar.dto.HabitsPatchRequest;
 import com.fiber.todocalendar.dto.HabitsRequest;
 import com.fiber.todocalendar.model.Habits;
-import com.fiber.todocalendar.config.DefaultValueProperties;
 import com.fiber.todocalendar.service.HabitsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-//@EnableConfigurationProperties(DefaultValueProperties.class)
 @Api(tags = "Habit 相關 API")
 @RestController
 public class HabitsController {

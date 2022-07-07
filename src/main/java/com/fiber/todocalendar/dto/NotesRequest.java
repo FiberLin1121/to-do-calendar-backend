@@ -1,7 +1,6 @@
 package com.fiber.todocalendar.dto;
 
 import com.fiber.todocalendar.model.Note;
-import com.fiber.todocalendar.model.Task;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

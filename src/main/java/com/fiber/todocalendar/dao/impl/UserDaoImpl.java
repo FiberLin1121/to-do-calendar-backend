@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -24,6 +25,9 @@ public class UserDaoImpl implements UserDao {
 
     @Autowired
     DefaultValueProperties defaultValueProperties;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public User getUserById(String userId) {
@@ -39,7 +43,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User createUser(UserRegisterRequest userRegisterRequest) {
-        User user = new User(userRegisterRequest.getName(), userRegisterRequest.getEmail(), userRegisterRequest.getPassword());
+        String encodePassword = passwordEncoder.encode(userRegisterRequest.getPassword());
+        User user = new User(userRegisterRequest.getName(), userRegisterRequest.getEmail(), encodePassword);
         LabelSetting labelSetting = new LabelSetting();
         labelSetting.setFirstColor(defaultValueProperties.getFirstColor());
         labelSetting.setSecondColor(defaultValueProperties.getSecondColor());

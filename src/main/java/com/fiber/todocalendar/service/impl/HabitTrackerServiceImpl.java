@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class HabitTrackerServiceImpl implements HabitTrackerService {
+
     @Autowired
     private HabitTrackerDao habitTrackerDao;
 

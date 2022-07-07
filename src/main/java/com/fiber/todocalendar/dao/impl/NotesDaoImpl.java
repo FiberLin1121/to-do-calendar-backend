@@ -5,7 +5,6 @@ import com.fiber.todocalendar.dto.NotesPatchRequest;
 import com.fiber.todocalendar.dto.NotesRequest;
 import com.fiber.todocalendar.model.Note;
 import com.fiber.todocalendar.model.Notes;
-import com.fiber.todocalendar.model.TodoList;
 import com.mongodb.BasicDBObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -26,23 +25,12 @@ public class NotesDaoImpl implements NotesDao {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    /**
-     * 查詢便條貼牆
-     *
-     * @param userId
-     */
     @Override
     public Notes getNotesByUserId(String userId) {
         Query query = new Query(Criteria.where("userId").is(userId));
         return mongoTemplate.findOne(query, Notes.class);
     }
 
-    /**
-     * 增加便條貼
-     *
-     * @param userId
-     * @param notesPatchRequest
-     */
     @Override
     public Notes addNote(String userId, NotesPatchRequest notesPatchRequest) {
         Query query = new Query(Criteria.where("userId").is(userId));
@@ -65,12 +53,6 @@ public class NotesDaoImpl implements NotesDao {
         return mongoTemplate.findAndModify(query, update, options, Notes.class);
     }
 
-    /**
-     * 修改便條貼
-     *
-     * @param userId
-     * @param notesPatchRequest
-     */
     @Override
     public Notes replaceNote(String userId, NotesPatchRequest notesPatchRequest) {
         String noteId = notesPatchRequest.getValue().get("noteId").toString();
@@ -80,7 +62,7 @@ public class NotesDaoImpl implements NotesDao {
         String tapeStyle = notesPatchRequest.getValue().get("tapeStyle").toString();
         Date now = new Date();
 
-        String targetColumn = identfyPath(notesPatchRequest.getPath());
+        String targetColumn = identifyPath(notesPatchRequest.getPath());
 
         Query query = Query.query(new Criteria().andOperator(
                 Criteria.where("userId").is(userId),
@@ -100,18 +82,12 @@ public class NotesDaoImpl implements NotesDao {
         return mongoTemplate.findAndModify(query, update, options, Notes.class);
     }
 
-    /**
-     * 移除便條貼
-     *
-     * @param userId
-     * @param notesPatchRequest
-     */
     @Override
     public Notes removeNote(String userId, NotesPatchRequest notesPatchRequest) {
         String noteId = notesPatchRequest.getValue().get("noteId").toString();
         Query query = new Query(Criteria.where("userId").is(userId));
 
-        String targetColumn = identfyPath(notesPatchRequest.getPath());
+        String targetColumn = identifyPath(notesPatchRequest.getPath());
 
         Update update = new Update()
                 .pull(targetColumn, new BasicDBObject("noteId", noteId))
@@ -123,12 +99,6 @@ public class NotesDaoImpl implements NotesDao {
         return mongoTemplate.findAndModify(query, update, options, Notes.class);
     }
 
-    /**
-     * 修改便條貼牆排序
-     *
-     * @param userId
-     * @param notesRequest
-     */
     @Override
     public Notes replaceNotes(String userId, NotesRequest notesRequest) {
         Query query = Query.query(Criteria.where("userId").is(userId));
@@ -151,7 +121,7 @@ public class NotesDaoImpl implements NotesDao {
         mongoTemplate.insert(notes, "notes");
     }
 
-    private String identfyPath(String path) {
+    private String identifyPath(String path) {
         String targetColumn = null;
         switch (path) {
             case "/list1":

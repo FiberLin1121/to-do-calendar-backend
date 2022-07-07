@@ -1,4 +1,4 @@
-package com.fiber.todocalendar.controller;
+package com.fiber.todocalendar.handler;
 
 import com.fiber.todocalendar.exception.AccountDuplicateException;
 import com.fiber.todocalendar.exception.ServiceExcetion;
@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.naming.AuthenticationException;
+
 @ControllerAdvice
-public class ExceptionHandlerController {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(ServiceExcetion.class)
     public ResponseEntity<String> handle(ServiceExcetion e) {

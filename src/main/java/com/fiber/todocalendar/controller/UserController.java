@@ -1,8 +1,6 @@
 package com.fiber.todocalendar.controller;
 
-import com.fiber.todocalendar.dto.UserLoginRequest;
-import com.fiber.todocalendar.dto.UserPatchRequest;
-import com.fiber.todocalendar.dto.UserRegisterRequest;
+import com.fiber.todocalendar.dto.*;
 import com.fiber.todocalendar.model.User;
 import com.fiber.todocalendar.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -19,15 +18,21 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/users/register")
-    public ResponseEntity<User> register(@RequestBody UserRegisterRequest userRegisterRequest){
+    public ResponseEntity<User> register(@RequestBody UserRegisterRequest userRegisterRequest) {
         User user = userService.register(userRegisterRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @PostMapping("/users/login")
-    public ResponseEntity<User> login(@RequestBody UserLoginRequest userLoginRequest){
-        User user = userService.login(userLoginRequest);
+    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
+        UserLoginResponse user = userService.login(userLoginRequest);
         return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @PostMapping("/users/logout")
+    public ResponseEntity logout() {
+        userService.logout();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/users/{userId}")

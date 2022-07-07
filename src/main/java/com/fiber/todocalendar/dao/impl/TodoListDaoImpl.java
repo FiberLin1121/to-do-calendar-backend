@@ -21,26 +21,16 @@ import java.util.Date;
 
 @Component
 public class TodoListDaoImpl implements TodoListDao {
+
     @Autowired
     MongoTemplate mongoTemplate;
 
-    /**
-     * 查詢代辦事項
-     *
-     * @param todoListQueryParams
-     */
     @Override
     public TodoList getTodoList(TodoListQueryParams todoListQueryParams) {
         Query query = new Query(Criteria.where("userId").is(todoListQueryParams.getUserId()).and("date").is(todoListQueryParams.getDate()));
         return mongoTemplate.findOne(query, TodoList.class);
     }
 
-    /**
-     * 增加代辦事項
-     *
-     * @param todoListQueryParams
-     * @param todoListPatchRequest
-     */
     @Override
     public TodoList addTask(TodoListQueryParams todoListQueryParams, TodoListPatchRequest todoListPatchRequest) {
         String name = todoListPatchRequest.getValue().get("name").toString();
@@ -61,12 +51,6 @@ public class TodoListDaoImpl implements TodoListDao {
         return mongoTemplate.findAndModify(query, update, options, TodoList.class);
     }
 
-    /**
-     * 修改代辦事項
-     *
-     * @param todoListQueryParams
-     * @param todoListPatchRequest
-     */
     @Override
     public TodoList replaceTask(TodoListQueryParams todoListQueryParams, TodoListPatchRequest todoListPatchRequest) {
         String taskId = todoListPatchRequest.getValue().get("taskId").toString();
@@ -74,7 +58,7 @@ public class TodoListDaoImpl implements TodoListDao {
         String labelType = todoListPatchRequest.getValue().get("labelType").toString();
         Date now = new Date();
 
-        String targetColumn = identfyPath(todoListPatchRequest.getPath());
+        String targetColumn = identifyPath(todoListPatchRequest.getPath());
 
         Query query = Query.query(new Criteria().andOperator(
                 Criteria.where("userId").is(todoListQueryParams.getUserId()),
@@ -93,19 +77,13 @@ public class TodoListDaoImpl implements TodoListDao {
         return mongoTemplate.findAndModify(query, update, options, TodoList.class);
     }
 
-    /**
-     * 移除代辦事項
-     *
-     * @param todoListQueryParams
-     * @param todoListPatchRequest
-     */
     @Override
     public TodoList removeTask(TodoListQueryParams todoListQueryParams, TodoListPatchRequest todoListPatchRequest) {
         Query query = Query.query(new Criteria().andOperator(
                 Criteria.where("userId").is(todoListQueryParams.getUserId()),
                 Criteria.where("date").is(todoListQueryParams.getDate())));
 
-        String targetColumn = identfyPath(todoListPatchRequest.getPath());
+        String targetColumn = identifyPath(todoListPatchRequest.getPath());
 
         Update update = new Update()
                 .pull(targetColumn, new BasicDBObject("taskId", todoListPatchRequest.getValue().get("taskId").toString()))
@@ -117,12 +95,6 @@ public class TodoListDaoImpl implements TodoListDao {
         return mongoTemplate.findAndModify(query, update, options, TodoList.class);
     }
 
-    /**
-     * 修改代辦事項排序
-     *
-     * @param todoListQueryParams
-     * @param todoListRequest
-     */
     @Override
     public TodoList replaceTodoList(TodoListQueryParams todoListQueryParams, TodoListRequest todoListRequest) {
         Query query = Query.query(new Criteria().andOperator(
@@ -140,18 +112,12 @@ public class TodoListDaoImpl implements TodoListDao {
         return mongoTemplate.findAndModify(query, update, options, TodoList.class);
     }
 
-    /**
-     * 建立代辦事項清單
-     *
-     * @param todoListQueryParams
-     * @return
-     */
     private void createTodoList(TodoListQueryParams todoListQueryParams) {
         TodoList task = new TodoList(todoListQueryParams.getUserId(), todoListQueryParams.getDate());
         mongoTemplate.insert(task, "todoLists");
     }
 
-    private String identfyPath(String path) {
+    private String identifyPath(String path) {
         String targetColumn = null;
         switch (path) {
             case "/todoList":
