@@ -100,11 +100,11 @@ public class UserServiceImpl implements UserService {
                 break;
             case "/password":
                 user = userDao.getUserById(userId);
-                if (user.getPassword().equals(userPatchRequest.getValue().get("oldPassword").toString())) {
+//                if (user.getPassword().equals(userPatchRequest.getValue().get("oldPassword").toString())) {
                     user = userDao.replacePassword(userId, userPatchRequest);
-                } else {
-                    throw new OldPasswordNotMatchException("舊密碼不符");
-                }
+//                } else {
+//                    throw new OldPasswordNotMatchException("舊密碼不符");
+//                }
                 break;
             case "/labelSetting":
                 user = userDao.replaceLabelSetting(userId, userPatchRequest);

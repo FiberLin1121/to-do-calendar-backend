@@ -70,10 +70,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User replacePassword(String userId, UserPatchRequest userPatchRequest) {
+        String encodePassword = passwordEncoder.encode(userPatchRequest.getValue().get("newPassword").toString());
         Query query = new Query(Criteria.where("id").is(userId));
 
         Update update = new Update()
-                .set("password", userPatchRequest.getValue().get("newPassword").toString())
+                .set("password", encodePassword)
                 .set("lastModifiedTime", new Date());
 
         FindAndModifyOptions options = new FindAndModifyOptions();
